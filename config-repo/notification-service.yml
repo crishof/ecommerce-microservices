@@ -1,0 +1,8 @@
+server:
+  port: 8086
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST_NOTIFICATION:localhost}:${DB_PORT_NOTIFICATION:5456}/notification_db
+    username: notification_user
+    password: notification_pass

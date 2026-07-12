@@ -1,0 +1,26 @@
+# Rutas del gateway. En Spring Cloud Gateway 5.0 (WebFlux) las rutas viven bajo
+# spring.cloud.gateway.server.webflux.* (reorganización respecto a versiones 4.x).
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              # Usamos rutas EXPLÍCITAS (más control) en lugar de auto-locator
+              enabled: false
+          routes:
+            - id: identity-service
+              uri: lb://identity-service
+              predicates:
+                - Path=/api/users/**
+            - id: catalog-service
+              uri: lb://catalog-service
+              predicates:
+                - Path=/api/catalog/**
+            - id: order-service
+              uri: lb://order-service
+              predicates:
+                # order-service sirve tanto la creación de pedidos como el
+                # historial /api/customers/{id}/orders (read model del pedido)
+                - Path=/api/orders/**,/api/customers/*/orders

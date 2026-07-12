@@ -1,54 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>4.1.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
-    <groupId>com.zaphirio</groupId>
-    <artifactId>ecommerce-microservices</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+
+    <groupId>com.crishof.ecommerce</groupId>
+    <artifactId>ecommerce-microservices-parent</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
     <name>ecommerce-microservices</name>
-    <description>ecommerce-microservices</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+    <description>Microservicios con Spring Cloud Netflix stack — Proyecto académico</description>
+
+    <modules>
+        <module>shared</module>
+        <module>infra/config-server</module>
+        <module>infra/discovery-server</module>
+        <module>infra/api-gateway</module>
+        <module>services/identity-service</module>
+        <module>services/catalog-service</module>
+        <module>services/order-service</module>
+        <module>services/payment-service</module>
+        <module>services/inventory-service</module>
+        <module>services/notification-service</module>
+    </modules>
+
     <properties>
         <java.version>25</java.version>
+        <maven.compiler.release>25</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Spring Cloud 2025.1.x es el release train de la generación Spring Boot 4.x -->
+        <spring-cloud.version>2025.1.2</spring-cloud.version>
+        <testcontainers.version>1.21.3</testcontainers.version>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Módulo shared referenciable por todos los servicios -->
+            <dependency>
+                <groupId>com.crishof.ecommerce</groupId>
+                <artifactId>shared</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
+            <!--
+                Declarado en build/plugins (no solo pluginManagement) para que
+                el goal repackage genere JARs ejecutables en todos los módulos jar.
+                El módulo 'shared' lo desactiva con <skip>true</skip> en su pom.
+                En el parent (packaging=pom) el goal repackage se omite solo.
+            -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
-
 </project>

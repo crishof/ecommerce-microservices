@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: discovery-server
+
+server:
+  port: 8761
+
+eureka:
+  # Este server NO se registra a sí mismo
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    # Deshabilitar self-preservation en dev (evita registros zombie)
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 15000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info

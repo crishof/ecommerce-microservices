@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: native   # Sirve la config desde el filesystem (config-repo montado como volumen)
+  cloud:
+    config:
+      server:
+        native:
+          # En Docker: /config-repo (volumen montado, ver docker-compose.yml)
+          # En local: file:./config-repo desde la raíz del monorepo
+          search-locations: ${CONFIG_REPO_LOCATION:file:./config-repo}
+
+server:
+  port: 8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info

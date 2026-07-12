@@ -1,0 +1,8 @@
+server:
+  port: 8085
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST_INVENTORY:localhost}:${DB_PORT_INVENTORY:5455}/inventory_db
+    username: inventory_user
+    password: inventory_pass

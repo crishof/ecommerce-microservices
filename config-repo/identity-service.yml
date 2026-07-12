@@ -1,0 +1,8 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST_IDENTITY:localhost}:${DB_PORT_IDENTITY:5451}/identity_db
+    username: identity_user
+    password: identity_pass

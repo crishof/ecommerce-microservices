@@ -1,0 +1,13 @@
+server:
+  port: 8084
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST_PAYMENT:localhost}:${DB_PORT_PAYMENT:5454}/payment_db
+    username: payment_user
+    password: payment_pass
+
+app:
+  payments:
+    failure-rate: 0.15
+    processing-delay-ms: 200
