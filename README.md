@@ -278,5 +278,16 @@ docker compose down -v     # elimina también los volúmenes de datos
 | 20 | [ecommerce-saga-pattern](https://github.com/crishof/ecommerce-saga-pattern) | Saga Pattern y transacciones distribuidas |
 | 21 | [ecommerce-observability](https://github.com/crishof/ecommerce-observability) | Observabilidad con Prometheus y Grafana |
 
+## Estado del proyecto
+- ✅ Build: 11 módulos Maven BUILD SUCCESS, 13 tests pasando
+- ✅ 15 containers healthy con `docker compose up -d` (config-server 8888, Eureka 8761, gateway 8080, 6 servicios 8081-8086, kafka 9095, kafka-ui 8090, 6 PostgreSQL 5451-5456)
+- ✅ Eureka registra los 7 servicios; verificado end-to-end vía gateway con los 3 casos de uso
+- ✅ Saga distribuida por choreography verificada: 15 pedidos con failure-rate=0.15 → 12 PAID / 3 CANCELLED con compensación consistente cross-service (payment FAILED×3, inventory RELEASED×3, notification ORDER_CANCELLED×3)
+- ✅ Topics Kafka verificados: `order-events` (32), `inventory-events` (16), `payment-events` (16)
+- ✅ Outbox pattern en order/inventory/payment: atomicidad tx-DB + publicación Kafka
+- ✅ Correlation-id propagado end-to-end vía MDC + Kafka headers
+- ⚠️ Choreography sin orquestador: debugging requiere `docker logs` de varios servicios. Resuelto en el proyecto 20 (orchestration) y el 21 (observability)
+- 🎯 **Diferencial**: el dominio pasa de 1 proceso (18) a 9 procesos independientes con BDs aisladas. Comunicación exclusivamente por red (REST + Kafka). Consistencia eventual
+
 ---
 _Autor: **Cristian Hoffmann** — Proyecto académico Java 25 / Spring Boot 4.1.0._
